@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask_cors import CORS
 import os
 from os.path import join, dirname, realpath
 import tensorflow as tf
@@ -8,6 +9,8 @@ from sklearn.preprocessing import MinMaxScaler
 
 
 app = Flask(__name__)
+
+CORS(app)
 
 #load the model
 model = tf.keras.models.load_model('occ_model.h5')
