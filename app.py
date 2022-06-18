@@ -37,7 +37,7 @@ def index():
 
 # Get the uploaded files
 @app.route("/predict/ocupancyrate", methods=['POST'])
-def uploadFiles():
+def ocupancyrate():
     # get the uploaded file
     uploaded_file = request.files['file']
     if uploaded_file.filename != '':
@@ -50,7 +50,7 @@ def uploadFiles():
     return y_pred_future #redirect(url_for('index'))
 
 @app.route("/predict/adr", methods=['POST'])
-def uploadFiles():
+def adr():
     # get the uploaded file
     uploaded_file = request.files['file']
     if uploaded_file.filename != '':
@@ -64,7 +64,7 @@ def uploadFiles():
 
 
 @app.route("/predict/ari", methods=['POST'])
-def uploadFiles():
+def ari():
     # get the uploaded file
     uploaded_file = request.files['file']
     if uploaded_file.filename != '':
@@ -77,7 +77,7 @@ def uploadFiles():
     return y_pred_future #redirect(url_for('index'))
 
 @app.route("/predict/ori", methods=['POST'])
-def uploadFiles():
+def ori():
     # get the uploaded file
     uploaded_file = request.files['file']
     if uploaded_file.filename != '':
@@ -91,7 +91,7 @@ def uploadFiles():
 
 
 @app.route("/predict/revpar", methods=['POST'])
-def uploadFiles():
+def revpar():
     # get the uploaded file
     uploaded_file = request.files['file']
     if uploaded_file.filename != '':
@@ -105,7 +105,7 @@ def uploadFiles():
 
 
 @app.route("/predict/rgi", methods=['POST'])
-def uploadFiles():
+def rgi():
     # get the uploaded file
     uploaded_file = request.files['file']
     if uploaded_file.filename != '':
