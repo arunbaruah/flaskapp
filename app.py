@@ -154,8 +154,7 @@ def parseCSV(filePath, model):
     prediction_copies = np.repeat(prediction, df_new_scaled.shape[1], axis=-1)
     y_pred_future = scaler.inverse_transform(prediction_copies)[:,0]
     for i in y_pred_future:
-    	results.append(i * 100)
-    
+        results.append(i * 100)
     return str(results)
 
 def model_predict(model, testX):
