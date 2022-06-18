@@ -13,8 +13,12 @@ app = Flask(__name__)
 CORS(app)
 
 #load the model
-model = tf.keras.models.load_model('occ_model.h5')
-
+occ_model = tf.keras.models.load_model('occ_model.h5')
+adr_model = tf.keras.models.load_model('adr_model.h5')
+ari_model = tf.keras.models.load_model('ari_model.h5')
+ori_model = tf.keras.models.load_model('ori_model.h5')
+revpar_model = tf.keras.models.load_model('revpar_model.h5')
+rgi_model = tf.keras.models.load_model('rgi_model.h5')
 
 # enable debugging mode
 app.config["DEBUG"] = True
@@ -32,7 +36,7 @@ def index():
 
 
 # Get the uploaded files
-@app.route("/predict", methods=['POST'])
+@app.route("/predict/ocupancyrate", methods=['POST'])
 def uploadFiles():
     # get the uploaded file
     uploaded_file = request.files['file']
@@ -40,9 +44,80 @@ def uploadFiles():
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
         # set the file path
         uploaded_file.save(file_path)
-        y_pred_future = parseCSV(file_path)
+
+        y_pred_future = parseCSV(file_path, occ_model)
          
     return y_pred_future #redirect(url_for('index'))
+
+@app.route("/predict/adr", methods=['POST'])
+def uploadFiles():
+    # get the uploaded file
+    uploaded_file = request.files['file']
+    if uploaded_file.filename != '':
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
+        # set the file path
+        uploaded_file.save(file_path)
+
+        y_pred_future = parseCSV(file_path, adr_model)
+         
+    return y_pred_future #redirect(url_for('index'))
+
+
+@app.route("/predict/ari", methods=['POST'])
+def uploadFiles():
+    # get the uploaded file
+    uploaded_file = request.files['file']
+    if uploaded_file.filename != '':
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
+        # set the file path
+        uploaded_file.save(file_path)
+
+        y_pred_future = parseCSV(file_path, ari_model)
+         
+    return y_pred_future #redirect(url_for('index'))
+
+@app.route("/predict/ori", methods=['POST'])
+def uploadFiles():
+    # get the uploaded file
+    uploaded_file = request.files['file']
+    if uploaded_file.filename != '':
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
+        # set the file path
+        uploaded_file.save(file_path)
+
+        y_pred_future = parseCSV(file_path, ori_model)
+         
+    return y_pred_future #redirect(url_for('index'))
+
+
+@app.route("/predict/revpar", methods=['POST'])
+def uploadFiles():
+    # get the uploaded file
+    uploaded_file = request.files['file']
+    if uploaded_file.filename != '':
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
+        # set the file path
+        uploaded_file.save(file_path)
+
+        y_pred_future = parseCSV(file_path, revpar_model)
+         
+    return y_pred_future #redirect(url_for('index'))
+
+
+@app.route("/predict/rgi", methods=['POST'])
+def uploadFiles():
+    # get the uploaded file
+    uploaded_file = request.files['file']
+    if uploaded_file.filename != '':
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
+        # set the file path
+        uploaded_file.save(file_path)
+
+        y_pred_future = parseCSV(file_path, rgi_model)
+         
+    return y_pred_future #redirect(url_for('index'))
+
+
 
 def prepare_test_data(df, n_future, n_past):
     testX = []
@@ -67,20 +142,26 @@ def prepare_test_data(df, n_future, n_past):
 
 
 
-def parseCSV(filePath):
-      # Use Pandas to parse the CSV file
+def parseCSV(filePath, model):
     df_test = pd.read_csv(filePath)
     n_future = 15
     n_past = 30
+    results = []
     test_dates, df_for_testing_scaled, testX, testY = prepare_test_data(df_test, n_future, n_past)
-    prediction = model.predict(testX)
+    prediction = model_predict(model, testX)
     scaler = MinMaxScaler()
     df_new_scaled = scaler.fit_transform(df_for_testing_scaled)
     prediction_copies = np.repeat(prediction, df_new_scaled.shape[1], axis=-1)
     y_pred_future = scaler.inverse_transform(prediction_copies)[:,0]
-    return str(y_pred_future)
+    for i in y_pred_future:
+    	results.append(i * 100)
+    
+    return str(results)
 
-      
+def model_predict(model, testX):
+    prediction = model.predict(testX)
+    return prediction
+
 
 
 
