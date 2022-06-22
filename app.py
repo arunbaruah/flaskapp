@@ -157,8 +157,11 @@ def parseCSV(filePath, model):
     print(y_pred_future)
     
     print(str(y_pred_future))
+
+    for i in y_pred_future:
+        results.append(i)
     
-    return str(y_pred_future)
+    return str(results)
 
 def model_predict(model, testX):
     prediction = model.predict(testX)
