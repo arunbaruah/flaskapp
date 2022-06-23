@@ -123,8 +123,8 @@ def prepare_test_data(df, n_future, n_past):
     testX = []
     testY = []
     df = df.drop(['id'], axis=1)
-    numerical_cols = list(df)[1:9]
-    categorical_cols = list(df)[9:12]
+    numerical_cols = list(df)[1:7]
+    categorical_cols = list(df)[7:10]
     for i in categorical_cols:
         del df[i]
     df[numerical_cols] = df[numerical_cols].fillna(df.mean())
